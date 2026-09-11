@@ -12,9 +12,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  -- Lazy.nvim itself
-  { 'folke/lazy.nvim' },
-
   -- LSP and completion
   {
     'williamboman/mason.nvim',
@@ -77,7 +74,6 @@ require('lazy').setup({
 	{'Mofiqul/vscode.nvim'},
 	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 	{'navarasu/onedark.nvim'},
-	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 	-- lazy.nvim
 	-- {
 	--   "folke/noice.nvim",
@@ -101,8 +97,3 @@ require('lazy').setup({
 	{"wsdjeg/terminal.nvim"},
 	{"wsdjeg/scrollbar.nvim"},
 })
-
--- If lazy_bootstrap was true, sync plugins
-if lazy_bootstrap then
-  require('lazy').sync()
-end

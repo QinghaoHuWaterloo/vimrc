@@ -17,3 +17,7 @@ local l = extras.l
 local postfix = require "luasnip.extras.postfix".postfix
 local snip = ls.snippet
 local text = ls.text_node
+
+require("luasnip.loaders.from_lua").lazy_load({
+  paths = vim.fn.stdpath("config") .. "/lua/snippets",
+})

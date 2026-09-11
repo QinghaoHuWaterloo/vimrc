@@ -19,11 +19,9 @@ require ("plugins.fterm")
 require ("plugins.lualine")
 require ("plugins.scrollbar")
 require ("core.keymaps")
+require ("core.racket")
 require ("core.markdown")
 --require ("plugins.noice")
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = false
-    }
-)
+-- Disable inline virtual-text diagnostics (hover/trouble shows them instead)
+vim.diagnostic.config({ virtual_text = false })

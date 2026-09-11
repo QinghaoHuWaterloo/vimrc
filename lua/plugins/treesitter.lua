@@ -1,6 +1,6 @@
 require'nvim-treesitter.configs'.setup {
   -- 添加不同语言
-  -- ensure_installed = { "vim", "help", "bash", "c", "cpp", "javascript", "json", "lua", "python", "typescript", "tsx", "java", "css", "rust", "markdown", "markdown_inline" }, -- one of "all" or a list of languages
+  ensure_installed = { "vim", "help", "bash", "c", "cpp", "javascript", "json", "lua", "python", "typescript", "tsx", "java", "css", "rust", "markdown", "markdown_inline", "racket" }, -- one of "all" or a list of languages
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -14,15 +14,10 @@ require'nvim-treesitter.configs'.setup {
 }
 
 
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.cpp = {
-  install_info = {
-    url = "~/projects/tree-sitter-cpp", -- local path or git repo
-    files = {"cc/cpp"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
-    -- optional entries:
-    branch = "main", -- default branch in case of git repo if different from master
-    generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-    requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-  },
-  filetype = "zu", -- if filetype does not match the parser name
-}
+-- Custom local cpp parser override removed: the local path ~/projects/tree-sitter-cpp
+-- doesn't exist and was overriding the built-in treesitter cpp parser, breaking highlighting.
+-- Uncomment and adjust if you have a local tree-sitter-cpp checkout to test:
+-- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+-- parser_config.cpp = {
+--   install_info = { url = "~/projects/tree-sitter-cpp", files = {"src/parser.c", "src/scanner.cc"} },
+-- }

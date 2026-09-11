@@ -37,7 +37,7 @@ local function jdtls_root_dir(arg)
     return vim.loop.cwd()
   end
 
-  return vim.fs.root(fname, {
+  local root = vim.fs.root(fname, {
     ".project",
     ".classpath",
     "gradlew",
@@ -48,7 +48,19 @@ local function jdtls_root_dir(arg)
     "settings.gradle",
     "settings.gradle.kts",
     ".git",
-  }) or vim.fs.dirname(fname)
+  })
+
+  if root then
+    return root
+  end
+
+  local standalone_root = vim.fs.joinpath(
+    jdtls_cache,
+    "standalone",
+    vim.fn.sha256(vim.fs.dirname(fname))
+  )
+  vim.fn.mkdir(standalone_root, "p")
+  return standalone_root
 end
 
 vim.lsp.config("clangd", {
@@ -64,7 +76,7 @@ vim.lsp.config("jdtls", {
   root_dir = jdtls_root_dir,
   cmd = function(dispatchers, config)
     local root_dir = config.root_dir or vim.loop.cwd()
-    local project_name = vim.fs.basename(root_dir)
+    local project_name = vim.fn.sha256(root_dir)
     local workspace_dir = vim.fs.joinpath(jdtls_workspace, project_name)
     vim.fn.mkdir(workspace_dir, "p")
 
@@ -106,3 +118,39 @@ vim.lsp.config("marksman", {
   capabilities = capabilities,
 })
 vim.lsp.enable("marksman")
+
+-- lua_ls and vimls: minimal setup, just wire in cmp capabilities
+vim.lsp.config("lua_ls", {
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      -- Suppress "undefined global vim" warnings in Neovim config
+      diagnostics = { globals = { "vim" } },
+      workspace = { checkThirdParty = false },
+    },
+  },
+})
+vim.lsp.enable("lua_ls")
+
+vim.lsp.config("vimls", { capabilities = capabilities })
+vim.lsp.enable("vimls")
+
+
+local function racket_root_dir(bufnr, on_dir)
+  local fname = vim.api.nvim_buf_get_name(bufnr)
+  if fname == "" then
+    on_dir(vim.uv.cwd())
+    return
+  end
+
+  local root = vim.fs.root(fname, { "raco.pkg", "info.rkt", ".git" }) or vim.fs.dirname(fname)
+  on_dir(root)
+end
+
+vim.lsp.config("racket_langserver", {
+  capabilities = capabilities,
+  cmd = { "racket", "-l", "racket-langserver" },
+  filetypes = { "racket" },
+  root_dir = racket_root_dir,
+})
+vim.lsp.enable("racket_langserver")

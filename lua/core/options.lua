@@ -36,12 +36,10 @@ opt.signcolumn = "number"
 --file
 opt.backup = false
 opt.swapfile = false
-opt.compatible = false
+-- opt.compatible is always false in Neovim; no need to set it
 opt.encoding = 'utf-8'
-opt.backspace = '2'
-
-vim.fn.sign_define('meow', { numhl = 'something' })
-vim.fn.sign_place(2, '', 'meow', '', { lnum = 1 })
+-- Allow backspace over autoindent, line breaks, and start of insert
+opt.backspace = { 'indent', 'eol', 'start' }
 
 -- fold setting
 vim.o.foldenable = true        -- Keep folds enabled

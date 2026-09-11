@@ -3,6 +3,16 @@ local function is_c_family()
     return vim.bo.filetype == 'c' or vim.bo.filetype == 'cpp' or vim.bo.filetype == 'cc'
 end
 
+local function is_racket()
+    return vim.bo.filetype == 'racket'
+end
+
+local function racket_command(command)
+    local directory = vim.fn.shellescape(vim.fn.expand('%:p:h'))
+    local filename = vim.fn.shellescape(vim.fn.expand('%:t'))
+    return string.format('cd %s && %s %s', directory, command, filename)
+end
+
 local function compile_cmd()
     if vim.bo.filetype == 'c' then
         return 'term time gcc % -o %< -std=c17 -Wall -Wextra -Wshadow -Wformat=2 -Wconversion -pedantic'
@@ -20,6 +30,8 @@ function R()
     if cmd then
         vim.cmd(cmd)
         vim.cmd('200')
+    elseif is_racket() then
+        vim.cmd('term ' .. racket_command('raco test'))
     elseif vim.bo.filetype == 'java' then
         vim.cmd('term javac %')
     elseif vim.bo.filetype == 'python' then
@@ -35,13 +47,15 @@ local fterm = require("FTerm")
 function M()
     vim.cmd('w')
     if is_c_family() then
-        vim.cmd('w')
         vim.cmd('cd %:p:h')  -- Change to the file's directory
         fterm.scratch({
             cmd = "time ./" .. vim.fn.expand('%:t:r')
         })
+    elseif is_racket() then
+        fterm.scratch({
+            cmd = racket_command('racket')
+        })
     elseif vim.bo.filetype == 'java' then
-        vim.cmd('w')  -- Save the current file
         vim.cmd('cd %:p:h')  -- Change to the file's directory
         fterm.scratch({
             cmd = "java " .. vim.fn.expand('%:t:r')
@@ -49,16 +63,19 @@ function M()
     end
 end
 
+-- Modd: run compiled binary without 'time' prefix (no-frills run)
 function Modd()
     vim.cmd('w')
     if is_c_family() then
-        vim.cmd('w')  -- Save the current file
         vim.cmd('cd %:p:h')  -- Change to the file's directory
         fterm.scratch({
-            cmd = "./ " .. vim.fn.expand('%:t:r')
+            cmd = "./" .. vim.fn.expand('%:t:r')  -- fixed: removed stray space before filename
+        })
+    elseif is_racket() then
+        fterm.scratch({
+            cmd = racket_command('racket')
         })
     elseif vim.bo.filetype == 'java' then
-        vim.cmd('w')  -- Save the current file
         vim.cmd('cd %:p:h')  -- Change to the file's directory
         fterm.scratch({
             cmd = "java " .. vim.fn.expand('%:t:r')
@@ -81,6 +98,11 @@ function Mode()
       "foot -e bash -c 'cd \"%s\" && time ./\"%s\"; %s'",
       file_dir, file_name_wo_ext, wait_key
     )
+  elseif filetype == 'racket' then
+    cmd = string.format(
+      "foot -e bash -c 'cd \"%s\" && racket \"%s.rkt\"; %s'",
+      file_dir, file_name_wo_ext, wait_key
+    )
   elseif filetype == 'java' then
     cmd = string.format(
       "foot -e bash -c 'cd \"%s\" && java \"%s\"; %s'",
@@ -97,9 +119,15 @@ end
 function Check()
     vim.cmd('w')  -- Save the current file
     vim.cmd('cd %:p:h')  -- Change to the file's directory
-    fterm.scratch({
-        cmd = "judge ./" .. vim.fn.expand('%:t:r')
-    })
+    if is_racket() then
+        fterm.scratch({
+            cmd = 'raco test ' .. vim.fn.shellescape(vim.fn.expand('%:t'))
+        })
+    else
+        fterm.scratch({
+            cmd = "judge ./" .. vim.fn.expand('%:t:r')
+        })
+    end
 end
 
 --nvimtree
@@ -118,7 +146,7 @@ vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 -- vim.api.nvim_set_keymap('n', '<C-s>', ':w<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<backspace>', ':noh<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<f2>', ':NvimTreeToggle<CR>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<C-s>', ':lua f', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<C-s>', ':lua f', {noremap = true})  -- incomplete, was a no-op
 
 vim.keymap.set("n", "D", '"_D')
 vim.keymap.set("n", "dd", '"_dd')
@@ -180,36 +208,3 @@ vim.keymap.set("n", "<f5>", toggle_colorscheme, { desc = "Toggle Colorscheme + B
 --   })
 -- end, { desc = 'Open foot terminal at current file location' })
 
--- Here is the reset of our map
-function f2()
-	vim.cmd('NvimTreeToggle')
-end
-
-function f3()
-	vim.cmd('Trouble diagnostics toggle')
-end
-
-function f6()
-	vim.cmd('set hlsearch')
-end
-
-function f8()
-	vim.cmd('lua insert_template()')
-end
-
-function f9()
-	vim.cmd('lua R()')
-end
-
-function f10()
-	vim.cmd('cd %:p:h')
-	vim.cmd('FTermToggle')
-end
-
-function f11()
-	vim.cmd('lua M()')
-end
-
-function f12()
-	vim.cmd('lua Check()')
-end
