@@ -31,6 +31,19 @@ end
 
 local group = vim.api.nvim_create_augroup("RacketCS135", { clear = true })
 
+vim.filetype.add({ extension = { rkt = "racket", rktl = "racket" } })
+
+local function run_file(test)
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    vim.notify("Save your Racket file before running it", vim.log.levels.WARN)
+    return
+  end
+  vim.cmd("write")
+  local command = test and "raco test " or "racket "
+  require("FTerm").run(command .. vim.fn.shellescape(path))
+end
+
 vim.api.nvim_create_autocmd("FileType", {
   group = group,
   pattern = "racket",
@@ -44,11 +57,11 @@ vim.api.nvim_create_autocmd("FileType", {
     options.expandtab = true
     options.commentstring = "; %s"
 
-    vim.keymap.set("n", "<leader>rr", M, {
+    vim.keymap.set("n", "<leader>rr", function() run_file(false) end, {
       buffer = event.buf,
       desc = "Racket: run in FTerm",
     })
-    vim.keymap.set("n", "<leader>rt", Check, {
+    vim.keymap.set("n", "<leader>rt", function() run_file(true) end, {
       buffer = event.buf,
       desc = "Racket: run raco test",
     })
