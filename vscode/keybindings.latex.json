@@ -1,0 +1,23 @@
+[
+  {
+    "key": "f9",
+    "command": "runCommands",
+    "when": "editorTextFocus && editorLangId == latex",
+    "args": {
+      "commands": [
+        "workbench.action.files.save",
+        "latex-workshop.build"
+      ]
+    }
+  },
+  {
+    "key": "f11",
+    "command": "latex-workshop.view",
+    "when": "editorTextFocus && editorLangId == latex"
+  },
+  {
+    "key": "ctrl+alt+j",
+    "command": "latex-workshop.synctex",
+    "when": "editorTextFocus && editorLangId == latex"
+  }
+]

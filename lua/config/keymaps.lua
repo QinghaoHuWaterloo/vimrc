@@ -1,0 +1,12 @@
+local map = vim.keymap.set
+map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+map("n", "<F6>", ":set hlsearch<CR>:/", { desc = "Search with highlighting" })
+map("n", "x", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+map("n", "U", "<cmd>undo<CR>", { desc = "Undo" })
+map("n", "<C-a>", "ggVG", { desc = "Select buffer" })
+map("n", "<Backspace>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlighting" })
+map("t", "<Esc>", "<C-\\><C-n>", { desc = "Leave terminal input" })
+map("n", "D", '"_D')
+map("n", "dd", '"_dd')
+map("n", "dw", '"_dw')

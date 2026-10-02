@@ -1,0 +1,172 @@
+{
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.watch.files.ignore": [
+    "**/*.aux",
+    "**/*.bbx",
+    "**/*.bbl",
+    "**/*.cbx",
+    "**/*.cfg",
+    "**/*.clo",
+    "**/*.cnf",
+    "**/*.def",
+    "**/*.dfu",
+    "**/*.enc",
+    "**/*.fd",
+    "**/*.fmt",
+    "**/*.gls",
+    "**/*.lbx",
+    "**/*.map",
+    "**/*.mkii",
+    "**/*.out",
+    "**/*.pfb",
+    "**/*.tfm",
+    "**/*.vf",
+    "**/*.code.tex",
+    "**/*.sty",
+    "**/texmf-{dist,var}/**",
+    "**/Local/MiKTeX/**",
+    "**/Local/Programs/MiKTeX/**",
+    "**/Roaming/MiKTeX/**",
+    "**/Program*/MiKTeX*/**",
+    "**/.miktex/texmfs/**",
+    "/var/cache/miktex-texmf/**",
+    "/usr/local/share/miktex-texmf/**",
+    "**/Library/Application Support/MiKTeX/texmfs/**",
+    "/dev/null",
+    "**/*.ind",
+    "**/*.idx",
+    "**/*.ilg"
+  ],
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.tabCompletion": "onlySnippets",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-lualatex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "lualatex",
+      "command": "lualatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "xelatex",
+      "command": "xelatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": [
+        "%DOCFILE%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "LuaLaTeX",
+      "tools": [
+        "lualatex"
+      ]
+    },
+    {
+      "name": "lualatex \u279e bibtex \u279e lualatex`\u00d72",
+      "tools": [
+        "lualatex",
+        "bibtex",
+        "lualatex",
+        "lualatex"
+      ]
+    },
+    {
+      "name": "latexmk \ud83d\udd03",
+      "tools": [
+        "latexmk"
+      ]
+    },
+    {
+      "name": "pdfLaTeX",
+      "tools": [
+        "pdflatex"
+      ]
+    },
+    {
+      "name": "xelatex",
+      "tools": [
+        "xelatex"
+      ]
+    },
+    {
+      "name": "pdflatex \u279e bibtex \u279e pdflatex`\u00d72",
+      "tools": [
+        "pdflatex",
+        "bibtex",
+        "pdflatex",
+        "pdflatex"
+      ]
+    },
+    {
+      "name": "xelatex \u279e bibtex \u279e xelatex`\u00d72",
+      "tools": [
+        "xelatex",
+        "bibtex",
+        "xelatex",
+        "xelatex"
+      ]
+    }
+  ],
+  "[latex]": {
+    "editor.wordBasedSuggestions": "off",
+    "editor.formatOnPaste": false,
+    "editor.suggestSelection": "recentlyUsedByPrefix"
+  },
+  "latex-workshop.intellisense.package.dirs": [
+    "/home/qinghaohu/references/template/sty"
+  ],
+  "latex-workshop.intellisense.package.extra": [
+    "amsmath",
+    "amssymb",
+    "amsthm",
+    "enumitem",
+    "tikz",
+    "graphicx",
+    "xcolor",
+    "mdframed",
+    "geometry",
+    "fancyhdr",
+    "hyperref"
+  ]
+}
